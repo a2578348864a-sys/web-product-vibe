@@ -2,13 +2,12 @@
 
 > **Turn a rough idea into a usable Web product through research, solution synthesis, product design, a complete project plan, vertical delivery, and real-browser acceptance.**
 
-[简体中文](README.zh-CN.md) · [Quick Start](docs/QUICK_START.md) · [Workflow](docs/WORKFLOW.md) · [Design Principles](docs/DESIGN_PRINCIPLES.md) · [GitHub Setup](docs/GITHUB_SETUP.md)
+[简体中文](README.zh-CN.md) · [Quick Start](docs/QUICK_START.md) · [Workflow](docs/WORKFLOW.md) · [Design Principles](docs/DESIGN_PRINCIPLES.md) · [Generic Agent Guide](platforms/GENERIC_AGENT.md) · [GitHub Setup](docs/GITHUB_SETUP.md)
 
 ![Version](https://img.shields.io/badge/version-0.3.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Codex](https://img.shields.io/badge/Codex-supported-black)
-![Claude Code](https://img.shields.io/badge/Claude%20Code-supported-black)
-![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-supported-black)
+![Model Agnostic](https://img.shields.io/badge/model-agnostic-1F883D)
+![Agent Agnostic](https://img.shields.io/badge/agent-host--neutral-0969DA)
 
 **Web Product Vibe** is a product-first skill for non-programmers and vibe coders using AI coding agents.
 
@@ -138,19 +137,34 @@ If a slice fails, fix the smallest blocker, re-run acceptance, then continue.
 
 API 200, DB writes, unit tests, lint, typecheck, build, and schema checks do not individually prove Web product completion.
 
-## Supported agents
+## Model-agnostic and agent-host-neutral
 
-One canonical skill powers all three hosts:
+The canonical Skill is **not tied to GPT, Claude, DeepSeek, Gemini, Qwen, Kimi, or any other model family**. The model is not the main integration boundary; the coding host / agent harness is.
+
+Any coding agent can use the core workflow when it can load the Skill (or equivalent persistent project instructions) and expose the tools needed for the requested mode.
+
+Capability levels:
+
+- **Instructions/context only** → planning modes can still work.
+- **Repository + file + shell/test access** → practical `BUILD` support.
+- **Real browser / Playwright-equivalent access** → full Web/UI `ACCEPT` and honest `DONE` evidence.
+- **Web/GitHub research access** → live `DISCOVER` research.
+
+The repository currently maintains explicit adapters/examples for:
 
 - **Codex** → `.agents/skills/web-product-vibe/`
 - **DeepSeek Harness** → `.agents/skills/web-product-vibe/`
 - **Claude Code** → `.claude/skills/web-product-vibe/`
 
-If a host lacks web search, browser automation, or another capability, the skill preserves the workflow and reports missing evidence instead of pretending verification passed.
+These are **maintained adapters, not an exclusive compatibility list**. For any other coding agent or future harness, see [Generic / Any-Agent Compatibility](platforms/GENERIC_AGENT.md).
+
+If a host lacks a required capability, preserve the workflow and report missing evidence instead of pretending verification passed.
 
 ## Quick start
 
-### Windows
+### Maintained installers
+
+#### Windows
 
 ```powershell
 .\install.ps1 -HostType all -ProjectRoot "D:\your-project"
@@ -158,11 +172,15 @@ If a host lacks web search, browser automation, or another capability, the skill
 
 Host choices: `codex` / `claude` / `dsh` / `all`.
 
-### macOS / Linux
+#### macOS / Linux
 
 ```bash
 ./install.sh all /path/to/your-project
 ```
+
+### Any other coding agent
+
+Copy the canonical folder `skill/web-product-vibe/` into that host's Skill / rules / project-instructions location, keeping `SKILL.md`, `references/`, and `templates/` together. If the host has no formal Skill system, expose `SKILL.md` as persistent project instructions and keep the sibling files accessible.
 
 Start with:
 
@@ -214,7 +232,8 @@ New ideas during implementation do not silently enter scope. Route them through 
 ## Designed for
 
 - non-programmers building Web products with AI coding agents
-- Codex / Claude Code / DeepSeek Harness users
+- users of any model-backed coding agent or harness that can load project instructions/Skills
+- Codex / Claude Code / DeepSeek Harness users via maintained adapters
 - people who research GitHub projects before designing their own solution
 - projects that need a complete cross-functional plan before autonomous execution
 - “keep going until done” workflows that still need product gates
@@ -243,6 +262,10 @@ web-product-vibe/
 │     └─ ...
 ├─ docs/
 ├─ platforms/
+│  ├─ GENERIC_AGENT.md
+│  ├─ CODEX.md
+│  ├─ CLAUDE_CODE.md
+│  └─ DEEPSEEK_HARNESS.md
 ├─ examples/
 ├─ tools/check_skill.py
 ├─ install.ps1
@@ -265,12 +288,13 @@ web-product-vibe/
 8. Reference projects are solution libraries, not automatic requirements.
 9. One version, one primary user outcome.
 10. Real-browser evidence is required for Web/UI DONE.
+11. The core workflow is model-agnostic; tool capability determines what can be honestly verified.
 
 More detail: [Design Principles](docs/DESIGN_PRINCIPLES.md).
 
 ## Status
 
-**v0.3.0 — early public release.** The skill package and installers are statically validated, but host behavior can evolve as Codex, Claude Code, and DeepSeek Harness change their skill systems.
+**v0.3.0 — early public release.** The core workflow is model-agnostic and host-neutral. Codex, Claude Code, and DeepSeek Harness have maintained installation adapters in this repository; other hosts use the generic integration contract and may require host-specific placement/configuration.
 
 ## Contributing
 
