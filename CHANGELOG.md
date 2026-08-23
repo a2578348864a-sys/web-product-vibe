@@ -6,13 +6,20 @@ All notable changes to Web Product Vibe are documented here.
 
 ### Changed
 
+- Added `SYNTHESIZE` as a first-class mode between research and design so comparable-project research ends in one recommended solution instead of flowing directly into implementation.
+- Added explicit separation of confirmed facts, interpretations, goals, constraints, and unverified assumptions.
+- Added a “question only if it can change the path” rule to reduce unnecessary clarification loops.
+- Added low-cost reversible validation for critical assumptions that could change product direction, architecture, cost, or feasibility.
+- Added `SOLUTION_PROPOSAL.md` for adopt/adapt/reject/park decisions, critical assumptions, failure/exit conditions, and recommendation-changing evidence.
+- Reworked `PLAN` into a comprehensive project execution contract covering product, frontend, backend, data, AI, security/privacy/permissions, dependencies, engineering boundaries, reliability, observability, testing, deployment/rollback, cost/performance, Product Skeleton, vertical slices, sync contract, and acceptance.
+- Added `PROJECT_PLAN.md` as the master plan template and moved Product Skeleton execution after plan readiness/freeze.
 - Added Product Skeleton (Slice 0) as an early real-browser product-structure gate for non-trivial new Web products and major UI redesigns.
 - Added a P0 rule that forbids backend-first completion for interactive Web work.
-- Defined continuous/autonomous execution precisely: agents may keep running without manual confirmation, but must preserve Product Skeleton → vertical slice → browser-gate order.
+- Defined continuous/autonomous execution precisely: agents may keep running without manual confirmation, but must preserve frozen plan → Product Skeleton → vertical slice → browser-gate order.
 - Added a front/back sync contract mapping user actions to frontend expression, backend effect, persisted truth, and refresh/reopen truth.
-- Added three completion layers: `Backend PASS`, `Frontend PASS`, and `Slice DONE`.
-- Strengthened AUDIT guidance for the common failure where backend capability advances while the UI still represents an older product version.
-- Updated Quick Start, workflow, design principles, README files, implementation slice template, acceptance report, and package validation.
+- Added completion layers: `Backend PASS`, `Frontend PASS`, `Slice DONE`, and `Project DONE`.
+- Strengthened AUDIT guidance for stale UI, product truth drift, and security/permission mismatches.
+- Updated README files, Quick Start, workflow, design principles, package validation, and templates.
 
 ## [0.3.0] - 2026-08-23
 
@@ -27,7 +34,6 @@ All notable changes to Web Product Vibe are documented here.
 
 ### Kept
 
-- Seven modes: DISCOVER, DESIGN, PLAN, BUILD, ACCEPT, CHANGE, AUDIT.
 - Product-first planning and mandatory real-browser acceptance for Web/UI completion.
 
 ## [0.2.0] - 2026-08-23

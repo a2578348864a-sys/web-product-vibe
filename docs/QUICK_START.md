@@ -16,83 +16,107 @@ Host choices: `codex` / `claude` / `dsh` / `all`.
 ./install.sh all /path/to/your-project
 ```
 
-## 2. Start with the right mode
+## 2. New project: follow the decision chain
 
-### New project: research first
+### DISCOVER — research comparable projects first
 
 ```text
 Use web-product-vibe. Enter DISCOVER.
 My project idea is ...
-Research comparable active GitHub projects first. Compare product positioning,
-user journey, UX/UI, technical choices and trade-offs. Do not write code yet.
+Research comparable active/new GitHub projects and products.
+Compare target user, user journey, UX/UI, technical choices and trade-offs.
+Keep facts separate from inference. Do not write code yet.
 ```
 
-### Once the idea is clear
+### SYNTHESIZE — decide our own solution
 
 ```text
-Enter DESIGN. Define the core user journey, screens, interactions, states,
-failure recovery, persistence and next step before architecture.
+Enter SYNTHESIZE.
+Based on the research and my constraints, decide what we should actually build.
+Separate confirmed facts, interpretations, goals, constraints and assumptions.
+Show what to adopt / adapt / reject / park, then give one recommended solution,
+its prerequisites, biggest failure mode, and what evidence would change the recommendation.
+If a critical assumption can change the direction, design the lowest-cost validation first.
 ```
 
-For a non-trivial new Web product or major UI redesign:
+### DESIGN — turn the chosen solution into a real user experience
 
 ```text
-Build Product Skeleton (Slice 0) first.
-Make the core journey clickable with representative states and fixtures/mocks where needed.
-Run a real-browser Skeleton Gate before substantial backend implementation.
+Enter DESIGN.
+Define the primary user journey, screens/routes, actions, information hierarchy,
+empty/loading/running/success/error states, persistence, refresh behavior,
+recovery paths and clear next steps.
 ```
 
-Then:
+### PLAN — generate the complete project plan before execution
 
 ```text
-Enter PLAN. Freeze the MVP and non-goals, then derive the minimum technical design
-and split implementation into vertical slices.
+Enter PLAN.
+Generate the comprehensive project plan before coding.
+Cover all applicable dimensions: product/scope, frontend, backend, data/source of truth,
+AI/Agent boundaries, security/privacy/permissions, external dependencies,
+engineering/module boundaries, reliability, observability, testing,
+deployment/migration/rollback, cost/performance where material,
+Product Skeleton, vertical slices, front/back sync contract and real-browser acceptance.
+Mark irrelevant sections N/A instead of inventing complexity.
+Give READY / READY WITH CONDITIONS / NOT READY and freeze only when ready.
 ```
 
-### Build incrementally
+Recommended planning chain:
 
 ```text
-Enter BUILD. Implement Slice 1 as a complete vertical behavior:
+IDEA → DISCOVER → SYNTHESIZE → DESIGN → PLAN → FREEZE
+```
+
+## 3. First execution stage: Product Skeleton
+
+After the plan is frozen:
+
+```text
+Enter BUILD and implement Product Skeleton (Slice 0) first.
+Make the planned core journey clickable with real routes/navigation and representative states.
+Use fixtures/mocks only where the real backend is not built yet.
+Then run a real-browser Skeleton Gate before broad backend implementation.
+```
+
+## 4. Build vertical slices
+
+```text
+Implement Slice 1 from the frozen plan as one complete user-observable behavior:
 frontend + interaction + backend + persistence + refresh truth + failure recovery.
-Then enter ACCEPT and verify it through a real browser before continuing.
+Then enter ACCEPT and verify it through a real browser before Slice 2.
 ```
 
-Recommended loop:
+Execution loop:
 
 ```text
-DISCOVER → DESIGN → PRODUCT SKELETON → Skeleton ACCEPT → PLAN
-→ BUILD 1 → ACCEPT → BUILD 2 → ACCEPT → ... → Full ACCEPT
+Product Skeleton → Skeleton ACCEPT
+→ BUILD 1 → ACCEPT
+→ BUILD 2 → ACCEPT
+→ ...
+→ Full E2E ACCEPT
 ```
 
-## 3. If you want the agent to keep running without stopping
-
-Use this pattern:
+## 5. If you want the agent to keep running without stopping
 
 ```text
-Continue through the approved plan without waiting for manual confirmation.
-Do not interpret continuous execution as backend-first execution.
-Complete Product Skeleton / Slice N with frontend + backend + persistence + real-browser acceptance
+Continue through the frozen plan without waiting for manual confirmation.
+Do not change scope and do not interpret continuous execution as backend-first execution.
+Complete Slice N with frontend + backend + persistence + recovery + real-browser acceptance
 before moving to Slice N+1. If acceptance fails, fix the smallest blocker, re-test, then continue.
-Do not expand frozen scope automatically.
 ```
 
-This preserves autonomous execution while preventing the common failure mode:
-
-```text
-all backend done → old UI left unchanged → final product unusable
-```
-
-## 4. Existing project that feels wrong
+## 6. Existing project that feels wrong
 
 ```text
 Use web-product-vibe. Enter AUDIT.
 Start from the real user entry and walk the core journey.
-Find front/back disconnects, old UI that no longer represents current backend behavior,
-misleading UI state, missing persistence, refresh problems, failure recovery gaps and dead ends.
+Find stale UI, front/back disconnects, misleading state, missing persistence,
+refresh problems, failure-recovery gaps, permission/security mismatches and dead ends.
 Do not start with architecture cleanup.
 ```
 
-## 5. New idea during development
+## 7. New idea during development
 
 ```text
 Enter CHANGE.
@@ -100,15 +124,14 @@ Classify this idea as REQUIRED NOW / VALUABLE NEXT / PARK / REPLACE.
 Do not implement it automatically.
 ```
 
-## 6. Completion labels
-
-Use these precisely:
+## 8. Completion labels
 
 - `Backend PASS` — backend/data/business behavior is correct
-- `Frontend PASS` — UI/interaction/state behavior exists
-- `Slice DONE` — Backend PASS + Frontend PASS + real-browser user-journey acceptance
+- `Frontend PASS` — UI/interaction/state behavior is correct
+- `Slice DONE` — Backend PASS + Frontend PASS + real-browser acceptance
+- `Project DONE` — the frozen core user journey passes full E2E
 
-## 7. Validate this package
+## 9. Validate this package
 
 ```bash
 python tools/check_skill.py

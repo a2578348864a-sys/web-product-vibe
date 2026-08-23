@@ -1,6 +1,6 @@
 # Web Product Vibe
 
-> **Turn a rough idea into a usable web product — not just a working backend.**
+> **Turn a rough idea into a usable Web product through research, solution synthesis, product design, a complete project plan, vertical delivery, and real-browser acceptance.**
 
 [简体中文](README.zh-CN.md) · [Quick Start](docs/QUICK_START.md) · [Workflow](docs/WORKFLOW.md) · [Design Principles](docs/DESIGN_PRINCIPLES.md) · [GitHub Setup](docs/GITHUB_SETUP.md)
 
@@ -10,143 +10,153 @@
 ![Claude Code](https://img.shields.io/badge/Claude%20Code-supported-black)
 ![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-supported-black)
 
-**Web Product Vibe** is a product-first skill for AI coding agents. It is designed for non-programmers and vibe coders who can describe what they want, but need the AI to research comparable products, shape the UX, validate a runnable product skeleton, freeze scope, implement in vertical slices, and verify the result through a real browser before calling it done.
+**Web Product Vibe** is a product-first skill for non-programmers and vibe coders using AI coding agents.
 
-The core problem it targets is simple:
+It addresses two common failures:
 
-> AI coding often produces a technically working backend while the frontend still represents an older workflow. APIs, database writes and tests pass, but the real user journey is confusing, stale or broken.
+1. Researching many GitHub projects but never turning the findings into one coherent product decision.
+2. Producing a technically complete backend while the frontend, user journey, state, persistence, security, and delivery plan remain incomplete or stale.
 
-Web Product Vibe makes **product truth come before technical truth** and keeps frontend, backend and persisted state on the same user journey.
-
-## Why this exists
-
-A common failure mode:
+The workflow is:
 
 ```text
-Idea
-→ Big plan
-→ All database / APIs / agents / backend
-→ Tests pass
-→ Frontend comes last
-→ UI still reflects the old product
-→ Technical chain works, user journey does not
-→ Large rework loop
-```
-
-Web Product Vibe:
-
-```text
-Idea
-→ Comparable-project research
-→ User journey + UX
-→ Product Skeleton (clickable UI shell)
-→ Real-browser Skeleton Gate
-→ Freeze MVP
-→ Technical plan
-→ Slice 1: frontend + backend + persistence + browser acceptance
-→ Slice 2
-→ ...
+IDEA
+→ DISCOVER: comparable products/projects
+→ SYNTHESIZE: our recommended solution
+→ DESIGN: user journey, screens, interactions, states
+→ PLAN: comprehensive project plan
+→ FREEZE: readiness + scope contract
+→ Product Skeleton: clickable Slice 0
+→ BUILD: vertical full-stack slices
+→ ACCEPT: real-browser gate per slice
 → Full E2E
+→ DONE
 ```
 
-The goal is not more process. The goal is **less front/back drift and less rework**.
+The goal is not more process. The goal is **to move expensive rework into earlier, cheaper decisions and validation**.
 
-## New: Product Skeleton (Slice 0)
+## Eight modes
 
-For a non-trivial new Web product or major UI redesign, create a runnable product shell before substantial backend implementation:
+| Mode | Purpose |
+|---|---|
+| `DISCOVER` | Research active/relevant GitHub projects and comparable products |
+| `SYNTHESIZE` | Turn research into one recommended solution: adopt, adapt, reject, park, and explain why |
+| `DESIGN` | Define user journey, screens, interactions, states, recovery, and next steps |
+| `PLAN` | Generate the comprehensive project execution contract and readiness verdict |
+| `BUILD` | Implement Product Skeleton or one complete vertical slice; backend-first completion is forbidden by default |
+| `ACCEPT` | Verify the real user journey in a browser / Playwright-equivalent environment |
+| `CHANGE` | Decide whether a new idea belongs now, next version, parking lot, or should replace something |
+| `AUDIT` | Find stale UI, front/back drift, misleading state, persistence gaps, and permission/security mismatches |
+
+## Research does not go straight into implementation
+
+`DISCOVER` answers “How do comparable products/projects work?”
+
+`SYNTHESIZE` must then answer:
+
+- What problem are we actually solving?
+- What is confirmed fact vs interpretation vs assumption?
+- Which ideas should we adopt, adapt, reject, or park?
+- Which approaches are genuinely viable?
+- What is the recommended solution and why?
+- What must be true for it to work?
+- What is the biggest likely failure mode?
+- What evidence would change the recommendation?
+
+If a critical assumption could change the product direction or architecture, validate it with the **lowest-cost reversible reality check** instead of continuing to debate it.
+
+## PLAN means a comprehensive project plan, not a backend architecture memo
+
+For a non-trivial new project or major redesign, PLAN covers all applicable dimensions before implementation:
+
+- product goal, target user, MVP, non-goals, boundaries
+- user journey, information architecture, screens, UX states
+- frontend architecture, routes, components, state, responsive/accessibility behavior
+- backend architecture, APIs/services/workflows, business rules, error semantics
+- data model, source of truth, read/write paths, lifecycle, migration, backup/recovery
+- AI/Agent boundaries, human review, eval, cost, and failure strategy where applicable
+- security/privacy/auth/authorization/secrets/input/upload/URL/prompt-injection boundaries where applicable
+- third-party dependencies and degradation strategy
+- engineering/module boundaries and configuration
+- reliability, retry, idempotency, concurrency, cancellation, partial success
+- logging, diagnostics, auditability, observability
+- unit/integration/contract/browser E2E testing
+- deployment, migration, smoke, rollback, compatibility
+- performance/cost budgets where material
+- Product Skeleton
+- vertical implementation slices
+- front/back sync contract
+- browser acceptance and final DONE definition
+- main risks, exit conditions, and rollback criteria
+
+Irrelevant sections are marked `N/A` with a reason. The skill should neither omit important dimensions nor invent complexity to make the plan look sophisticated.
+
+## Freeze first, then execute Product Skeleton
+
+Once the plan is `READY`, implementation begins with Product Skeleton (Slice 0) for non-trivial new UI work:
 
 - core routes/screens
 - real navigation
 - primary actions and next steps
 - representative empty/loading/success/error states
-- fixtures/mocks when real capabilities are not wired yet
+- fixtures/mocks where real capabilities are not wired yet
 - responsive behavior where required
 
-Then run a real-browser / Playwright-equivalent Skeleton Gate.
+Then run a real-browser Skeleton Gate before broad backend implementation.
 
-This is not fake completion. It is an early, cheap way to detect that the whole journey, navigation or interaction model is wrong before the backend becomes expensive to change.
+This catches “the whole journey is wrong” while it is still cheap to fix.
 
 ## “Keep going” must not become backend-first execution
 
-Web Product Vibe supports autonomous execution. An agent can continue through an approved plan without waiting for manual confirmation between slices.
-
-But “do not stop” has a precise meaning:
-
-> **Continue the validated product sequence — do not finish every backend layer first and postpone the frontend until the end.**
-
-Preferred sequence:
+Autonomous execution is supported:
 
 ```text
-Product Skeleton
+Frozen plan
+→ Product Skeleton
 → browser PASS
-→ Slice 1 frontend + backend + persistence
+→ Slice 1: frontend + backend + persistence + recovery
 → browser PASS
 → Slice 2
 → browser PASS
 → ...
 ```
 
-If a slice fails, fix the smallest blocking product issue, re-run acceptance, then continue.
+Not allowed as the default for interactive Web work:
 
-## What it does
+```text
+all DB → all APIs → all agents → all tests → UI at the end
+```
 
-| Mode | Purpose |
-|---|---|
-| `DISCOVER` | Research active / relevant GitHub projects and comparable products before deciding the solution |
-| `DESIGN` | Define target user, core journey, screens, interactions, states, failure recovery and Product Skeleton |
-| `PLAN` | Freeze MVP and non-goals, then derive the minimum technical design and vertical slices |
-| `BUILD` | Build Product Skeleton or one complete vertical slice; backend-first completion is not allowed by default |
-| `ACCEPT` | Verify the product through a real browser / Playwright-equivalent user journey |
-| `CHANGE` | Decide whether a new idea belongs now, next version, parking lot, or should replace something |
-| `AUDIT` | Find front/back drift, stale UI, misleading states, missing persistence and product dead ends |
+If a slice fails, fix the smallest blocker, re-run acceptance, then continue.
 
-## Three completion layers
-
-Web Product Vibe separates:
+## Completion model
 
 - **Backend PASS** — backend/data/business behavior is correct
-- **Frontend PASS** — page/interaction/state/navigation behavior exists
+- **Frontend PASS** — page/interaction/state/navigation behavior is correct
 - **Slice DONE** — Backend PASS + Frontend PASS + real-browser acceptance for the same user-observable behavior
+- **Project DONE** — the frozen core user journey passes full E2E
 
-A strong backend does not make the project done if the frontend still represents an older product version.
-
-## The hard rule
-
-For Web/UI work, none of these alone means **DONE**:
-
-- API returns 200
-- database write succeeds
-- unit tests pass
-- lint / typecheck / build pass
-- code review looks good
-
-A feature is complete only when a real user journey works through a real browser (or Playwright-equivalent), including UI feedback, backend effect, persistence, refresh, failure recovery and a clear next step.
-
-If that evidence is missing, the result is `INSUFFICIENT EVIDENCE` or `CONDITIONAL PASS` — not `DONE`.
+API 200, DB writes, unit tests, lint, typecheck, build, and schema checks do not individually prove Web product completion.
 
 ## Supported agents
 
 One canonical skill powers all three hosts:
 
-- **Codex** → install to `.agents/skills/web-product-vibe/`
-- **DeepSeek Harness** → install to `.agents/skills/web-product-vibe/`
-- **Claude Code** → install to `.claude/skills/web-product-vibe/`
+- **Codex** → `.agents/skills/web-product-vibe/`
+- **DeepSeek Harness** → `.agents/skills/web-product-vibe/`
+- **Claude Code** → `.claude/skills/web-product-vibe/`
 
-No host-specific workflow logic is required. If a host lacks web search, browser automation, or another capability, the skill preserves the workflow and reports the missing evidence instead of pretending it was verified.
+If a host lacks web search, browser automation, or another capability, the skill preserves the workflow and reports missing evidence instead of pretending verification passed.
 
 ## Quick start
 
 ### Windows
 
 ```powershell
-# Install for all three hosts into an existing project
 .\install.ps1 -HostType all -ProjectRoot "D:\your-project"
-
-# Or choose one host
-.\install.ps1 -HostType codex -ProjectRoot "D:\your-project"
-.\install.ps1 -HostType claude -ProjectRoot "D:\your-project"
-.\install.ps1 -HostType dsh -ProjectRoot "D:\your-project"
 ```
+
+Host choices: `codex` / `claude` / `dsh` / `all`.
 
 ### macOS / Linux
 
@@ -154,78 +164,89 @@ No host-specific workflow logic is required. If a host lacks web search, browser
 ./install.sh all /path/to/your-project
 ```
 
-Then start naturally:
+Start with:
 
 ```text
 Use web-product-vibe. Enter DISCOVER.
 My project idea is ...
-Research comparable active GitHub projects first. Focus on product, user journey, UX/UI,
-technical choices and trade-offs. Do not write code yet.
+Research comparable active/new GitHub projects and products.
+Compare user, journey, UX/UI, technical choices and trade-offs.
+Keep verified facts separate from inference. Do not write code yet.
 ```
 
-For autonomous execution later:
+Then:
 
 ```text
-Continue through the frozen plan without waiting for manual confirmation.
-Still follow Product Skeleton → vertical slice → real-browser acceptance.
-Each slice must complete frontend + backend + persistence + recovery before moving on.
-Do not finish all backend layers first and patch the UI at the end.
+Enter SYNTHESIZE.
+Turn the research into our own recommended solution.
+Explain what to adopt, adapt, reject, or park; list critical assumptions,
+failure/exit conditions, and what evidence would change the recommendation.
 ```
 
-For the full flow, see [Quick Start](docs/QUICK_START.md).
+Then:
+
+```text
+Enter DESIGN, then PLAN.
+Generate the full project plan and readiness verdict before implementation.
+After the plan is frozen, continue Product Skeleton → vertical slices → browser acceptance.
+```
+
+See [Quick Start](docs/QUICK_START.md) for the full pattern.
 
 ## 30-second workflow
 
 ```mermaid
 flowchart LR
-    A[Idea] --> B[DISCOVER\nResearch]
-    B --> C[DESIGN\nJourney + UX]
-    C --> S[PRODUCT SKELETON\nClickable UI shell]
-    S --> SG[Skeleton ACCEPT\nReal browser]
-    SG --> D[PLAN\nFreeze MVP]
-    D --> E[BUILD\nVertical slice]
-    E --> F[ACCEPT\nReal browser]
-    F -->|Pass| G[Next slice]
-    F -->|Fail| H[Fix smallest blocker]
-    H --> F
-    G --> E
+    A[IDEA] --> B[DISCOVER\nResearch]
+    B --> C[SYNTHESIZE\nRecommended solution]
+    C --> D[DESIGN\nJourney + UX]
+    D --> P[PLAN\nComprehensive plan]
+    P --> F[FREEZE\nReadiness gate]
+    F --> S[PRODUCT SKELETON\nSlice 0]
+    S --> SG[Real browser]
+    SG --> I[BUILD\nVertical slice]
+    I --> A1[ACCEPT\nReal browser]
+    A1 -->|Pass| I
 ```
 
-A new idea during implementation does **not** silently enter scope. Route it through `CHANGE` first.
+New ideas during implementation do not silently enter scope. Route them through `CHANGE`.
 
 ## Designed for
 
-- non-programmers building web products with AI coding agents
-- users of Codex / Claude Code / DeepSeek Harness
-- autonomous “keep going until done” workflows that still need product gates
-- projects where backend capability advances but the UI stays stale
-- greenfield projects that need GitHub/reference research before planning
-- existing projects that need a product-first audit rather than another architecture rewrite
+- non-programmers building Web products with AI coding agents
+- Codex / Claude Code / DeepSeek Harness users
+- people who research GitHub projects before designing their own solution
+- projects that need a complete cross-functional plan before autonomous execution
+- “keep going until done” workflows that still need product gates
+- projects where backend capability advances while UI/product truth stays stale
 
 ## Not trying to be
 
-- a full agile framework
-- a replacement for repository rules (`AGENTS.md`, `CLAUDE.md`, etc.)
+- a heavyweight agile framework
+- a replacement for repository rules such as `AGENTS.md` or `CLAUDE.md`
 - a UI component library
 - a backend architecture framework
-- an excuse to create dozens of planning documents
+- an excuse to generate dozens of documents
 
-It intentionally stays small: one core skill, a few templates, a Product Skeleton gate, vertical slices, and browser-verified completion.
+The goal is simple: **make existing AI coding agents better at delivering complete Web products, not merely more code.**
 
 ## Repository layout
 
 ```text
 web-product-vibe/
-├─ skill/web-product-vibe/       # Single source of truth
+├─ skill/web-product-vibe/
 │  ├─ SKILL.md
 │  ├─ references/
 │  └─ templates/
-├─ docs/                         # Human-facing guides
-├─ platforms/                    # Codex / Claude Code / DeepSeek Harness notes
-├─ examples/                     # Example usage
-├─ tools/check_skill.py          # Package validation
-├─ install.ps1                   # Windows installer
-├─ install.sh                    # macOS/Linux installer
+│     ├─ SOLUTION_PROPOSAL.md
+│     ├─ PROJECT_PLAN.md
+│     └─ ...
+├─ docs/
+├─ platforms/
+├─ examples/
+├─ tools/check_skill.py
+├─ install.ps1
+├─ install.sh
 ├─ CHANGELOG.md
 ├─ CONTRIBUTING.md
 ├─ LICENSE
@@ -234,20 +255,22 @@ web-product-vibe/
 
 ## Design philosophy
 
-1. **Product truth before technical truth.**
-2. **User journey before architecture.**
-3. **Product Skeleton before heavy backend implementation.**
-4. **Vertical slices before horizontal technical layers.**
-5. **“Keep going” does not mean “finish backend first.”**
-6. **Reference projects are solution libraries, not automatic requirements.**
-7. **One version, one primary user outcome.**
-8. **Real-browser acceptance is required for Web/UI completion.**
+1. Separate facts, interpretations, goals, constraints, and assumptions.
+2. Research is not a decision; synthesize a recommendation.
+3. User journey before architecture.
+4. Comprehensive project plan before implementation.
+5. Product Skeleton before heavy backend work.
+6. Vertical slices before horizontal technical layers.
+7. “Keep going” does not mean “finish backend first.”
+8. Reference projects are solution libraries, not automatic requirements.
+9. One version, one primary user outcome.
+10. Real-browser evidence is required for Web/UI DONE.
 
 More detail: [Design Principles](docs/DESIGN_PRINCIPLES.md).
 
 ## Status
 
-**v0.3.0 — early public release.** The skill package and installers are statically validated, but host behavior can evolve as Codex, Claude Code and DeepSeek Harness change their skill systems.
+**v0.3.0 — early public release.** The skill package and installers are statically validated, but host behavior can evolve as Codex, Claude Code, and DeepSeek Harness change their skill systems.
 
 ## Contributing
 

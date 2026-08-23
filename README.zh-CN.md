@@ -1,6 +1,6 @@
 # Web Product Vibe
 
-> **把一个模糊想法做成“真实用户能顺畅用完”的 Web 产品，而不只是做出一个后端能跑的系统。**
+> **把一个模糊想法，经过调研、方案决策、产品设计和完整项目计划，做成真实用户能顺畅用完的 Web 产品。**
 
 [English](README.md) · [快速开始](docs/QUICK_START.md) · [完整工作流](docs/WORKFLOW.md) · [设计原则](docs/DESIGN_PRINCIPLES.md) · [GitHub 发布建议](docs/GITHUB_SETUP.md)
 
@@ -12,121 +12,134 @@
 
 **Web Product Vibe** 是给非程序员 / Vibe Coding 用户用的“产品优先”AI Coding Skill。
 
-它解决的不是“AI 不会写代码”，而是更常见的问题：
+它解决的不只是“后端做完了，前端还是旧的”这一类问题，也解决更前面的一层：
 
-> 后端、API、数据库都做出来了，测试也过了，但前端还是旧逻辑；真实用户打开页面以后不知道怎么用，页面状态、交互反馈、持久化、失败恢复和后端业务语义对不上，最后只能不断返工。
+> 找了一堆 GitHub 项目以后，到底该借什么、不借什么？我们自己的方案是什么？产品、前端、后端、数据、安全、边界、测试和发布到底怎么组成一份真正能执行的项目计划？
 
-这个 Skill 强制把顺序改成：**先验证用户怎么用，再让前端、后端、数据围绕同一个用户旅程同步推进。**
-
-## 为什么做它
-
-最危险的 AI Coding 流程不是“代码写不出来”，而是：
+这个 Skill 把链路固定成：
 
 ```text
-想法
-→ 大项目书
-→ 全部数据库 / API / Agent / 后端
-→ 测试 PASS
-→ 最后才补前端
-→ 前端仍是旧版产品
-→ 全链路技术上能跑，但用户根本没法用
-→ 大量返工
+IDEA
+→ DISCOVER：调研同类项目 / 产品
+→ SYNTHESIZE：取长补短，形成自己的推荐方案
+→ DESIGN：用户旅程、页面、交互、状态
+→ PLAN：完整项目计划书
+→ FREEZE：冻结范围与执行合同
+→ Product Skeleton：先做可点击产品骨架
+→ BUILD：按纵向 Slice 前后端同步实现
+→ ACCEPT：每个 Slice 真实浏览器验收
+→ Full E2E
+→ DONE
 ```
 
-Web Product Vibe：
+目的不是增加流程，而是**把最贵的返工提前变成最便宜的判断和验证**。
 
-```text
-想法
-→ GitHub / 同类产品调研
-→ 用户旅程 + UX
-→ Product Skeleton（可点击前端骨架）
-→ 真实浏览器 Skeleton Gate
-→ 冻结 MVP
-→ 技术方案
-→ Slice 1：前端 + 后端 + 数据 + 浏览器验收
-→ Slice 2
-→ ...
-→ 完整 E2E
-```
+## 8 个工作模式
 
-目的不是增加流程，而是**减少“后端已经新版本、前端还停在旧版本”的返工**。
+| 模式 | 解决什么 |
+|---|---|
+| `DISCOVER` | 找近期维护、活跃、有真实产品/UI 参考价值的 GitHub / 同类项目 |
+| `SYNTHESIZE` | 把调研结果变成我们自己的推荐方案：借什么、不借什么、为什么 |
+| `DESIGN` | 定真实用户、核心旅程、页面、交互、状态、失败恢复和下一步 |
+| `PLAN` | 生成完整项目计划书，并给出 READY / NOT READY |
+| `BUILD` | 做 Product Skeleton 或一个完整纵向 Slice，禁止后端先行 |
+| `ACCEPT` | 用真实浏览器 / Playwright 等价方式验收真实用户旅程 |
+| `CHANGE` | 新想法先判断现在做 / 下版 / 停车场 / 替换现有方案 |
+| `AUDIT` | 找前后端不同步、旧 UI、状态失真、刷新丢失、权限/安全语义断裂 |
 
-## 新增：Product Skeleton（Slice 0）
+## 调研之后，不直接开工
 
-对于非简单 Web 新项目或大 UI 改版，在大规模后端开发之前，先做一个可运行的产品骨架：
+`DISCOVER` 只回答“别人怎么做”。
+
+`SYNTHESIZE` 必须再回答：
+
+- 真正的问题是什么
+- 哪些是已确认事实，哪些只是解释或假设
+- 哪些参考项目的设计值得采用 / 改造 / 拒绝 / 暂存
+- 有哪些真正可行的路线
+- 最推荐哪一条，为什么
+- 这条路线成立的前提是什么
+- 最大失败路径是什么
+- 什么新证据会推翻当前结论
+
+如果一个关键假设可能改变整个产品方向或架构，优先做**最低成本、可逆、能得到真实反馈的验证**，而不是继续讨论。
+
+## PLAN = 完整项目计划书，不是后端技术书
+
+对非简单新项目或大改版，`PLAN` 必须在执行前覆盖所有适用维度：
+
+- 产品目标、用户、MVP、非目标和边界
+- 用户旅程、信息架构、页面和 UX 状态
+- 前端架构、路由、组件、状态、响应式、可访问性
+- 后端架构、API / Service / Workflow、业务规则、错误语义
+- 数据模型、Source of Truth、读写、生命周期、迁移、备份恢复
+- AI / Agent 职责、模型边界、人工确认、Eval、成本和失败策略（如适用）
+- 安全、隐私、认证、权限、Secrets、输入、文件、URL、Prompt Injection（如适用）
+- 第三方依赖和降级策略
+- 工程模块边界、配置、兼容性
+- 可靠性、重试、幂等、并发、取消、部分成功
+- 日志、诊断、审计、可观测性
+- Unit / Integration / Contract / Browser E2E 测试
+- 部署、迁移、Smoke、Rollback
+- 性能 / 成本预算（如重要）
+- Product Skeleton
+- 纵向实施 Slice
+- 前后端同步合同
+- 浏览器验收和最终 DONE 标准
+- 风险、退出条件和回滚条件
+
+不适用的部分写 `N/A` 并说明原因，**不能因为不想写就漏掉，也不能为了显得专业硬造复杂度。**
+
+## 先冻结计划，再执行 Product Skeleton
+
+计划判定 `READY` 后才进入执行。
+
+第一阶段不是先写数据库，而是 Product Skeleton（Slice 0）：
 
 - 核心页面 / 路由
 - 真导航
 - 主按钮和下一步
-- 代表性的空状态 / Loading / 成功 / 失败
-- 必要时用 Fixture / Mock 表达尚未接入的真实能力
+- 空状态 / Loading / 成功 / 失败等代表性状态
+- 真实能力没接入时可用 Fixture / Mock
 - 响应式基本可用
 
-然后必须真实浏览器走通核心产品结构。
+然后先用真实浏览器验证整个产品结构。
 
-这一步不是“假装做完”，而是为了在最便宜的时候发现：
+这样能在后端还没变贵之前发现：
 
-> 页面是不是走错了？用户能不能看懂？导航是不是错的？核心操作是不是根本不自然？
+> 页面是不是走错了？用户能不能看懂？导航是不是错的？核心操作是不是不自然？
 
-## “不要停”也不能变成后端先行
+## “不要停”不等于“先把后端做完”
 
-Web Product Vibe 支持让 Agent 持续自主执行，不需要你每个阶段守在电脑前确认。
-
-但“不要停”有明确含义：
-
-> **持续执行已经批准的产品顺序，而不是先把所有后端做完，再统一补前端。**
-
-正确方式：
+Web Product Vibe 支持 Agent 持续自主执行。
 
 ```text
-Product Skeleton
+冻结计划
+→ Product Skeleton
 → 浏览器 PASS
-→ Slice 1 前端 + 后端 + 持久化
+→ Slice 1：前端 + 后端 + 持久化 + 失败恢复
 → 浏览器 PASS
 → Slice 2
 → 浏览器 PASS
 → ...
 ```
 
-如果某个 Slice 失败，Agent 应修最小阻塞问题、重新验收，然后继续，而不是跳过去堆后端。
+如果某个 Slice 失败，修最小阻塞问题、重新验收，再继续。
 
-## 7 个工作模式
+不允许：
 
-| 模式 | 解决什么 |
-|---|---|
-| `DISCOVER` | 先找近期维护、活跃、有参考价值的 GitHub / 同类产品，取长补短 |
-| `DESIGN` | 定真实用户、用户旅程、页面、交互、状态、失败恢复，并设计 Product Skeleton |
-| `PLAN` | 冻结 MVP / 非目标，再倒推最小技术方案和纵向 Slice |
-| `BUILD` | 做 Product Skeleton 或一个完整纵向 Slice，不允许“全部后端先做” |
-| `ACCEPT` | 用真实浏览器 / Playwright 等价方式验收用户旅程 |
-| `CHANGE` | 新想法先判断：现在做 / 下版 / 停车场 / 替换现有方案 |
-| `AUDIT` | 专门找前后端不同步、旧 UI、状态失真、刷新丢失和交互死路 |
+```text
+全部 DB → 全部 API → 全部 Agent → 全部测试 → 最后补 UI
+```
 
 ## 三层完成标准
 
-为了避免“后端 PASS = 项目完成”，Skill 强制区分：
-
 - **Backend PASS**：后端 / 数据 / 业务逻辑正确
-- **Frontend PASS**：页面 / 交互 / 状态 / 导航存在且正确
+- **Frontend PASS**：页面 / 交互 / 状态 / 导航正确
 - **Slice DONE**：Backend PASS + Frontend PASS + 同一用户旅程的真实浏览器验收
+- **Project DONE**：冻结的核心用户旅程完整 E2E 通过
 
-只要前端还是旧版产品，即使后端测试全绿，也不能宣布 DONE。
-
-## 最重要的硬规则
-
-对于 Web / UI 功能，下面这些**都不能单独代表 DONE**：
-
-- API 200
-- 数据库写入成功
-- Unit Test PASS
-- Lint / Typecheck / Build PASS
-- Code Review 没发现问题
-
-必须从真实用户入口，通过真实浏览器（或 Playwright 等价方式）完整走通核心旅程，并确认：
-
-**页面反馈正确 → 真正触发后端 → 数据正确保存 → 刷新仍正确 → 失败能恢复 → 用户知道下一步 → 前后端业务语义一致。**
-
-缺少真实浏览器证据，只能判定 `INSUFFICIENT EVIDENCE` / `CONDITIONAL PASS`，不能宣布完成。
+API 200、数据库写入、Unit Test、Lint、Typecheck、Build、Schema PASS 都不能单独代表 Web 产品完成。
 
 ## 三端兼容
 
@@ -136,21 +149,17 @@ Product Skeleton
 - **DeepSeek Harness** → `.agents/skills/web-product-vibe/`
 - **Claude Code** → `.claude/skills/web-product-vibe/`
 
-核心工作流不依赖某个平台独占功能。如果当前 Agent 没有 Web 搜索、真实浏览器或其他能力，必须明确缺少证据，不能假装验证通过。
+核心工作流不依赖某个平台独占功能。缺少 Web 搜索、真实浏览器或其他能力时，必须明确证据不足，不能假装验证通过。
 
 ## 快速安装
 
 ### Windows
 
 ```powershell
-# 三端一起准备
 .\install.ps1 -HostType all -ProjectRoot "D:\你的项目"
-
-# 或只安装一个
-.\install.ps1 -HostType codex -ProjectRoot "D:\你的项目"
-.\install.ps1 -HostType claude -ProjectRoot "D:\你的项目"
-.\install.ps1 -HostType dsh -ProjectRoot "D:\你的项目"
 ```
+
+也可分别使用 `codex` / `claude` / `dsh`。
 
 ### macOS / Linux
 
@@ -158,76 +167,87 @@ Product Skeleton
 ./install.sh all /path/to/your-project
 ```
 
-然后直接对 AI 说：
+## 推荐的第一次使用方式
 
 ```text
 使用 web-product-vibe，进入 DISCOVER。
 我的项目想法是……。
-先找同类 GitHub 项目，优先近期维护、活跃、新兴且有真实产品/UI 的方案；
-从产品、用户旅程、UX/UI、技术和取舍几个角度取长补短。先不要写代码。
+先研究同类 GitHub / 产品，优先近期维护、活跃、新兴且有真实产品/UI 的方案；
+从用户、旅程、UX/UI、技术和取舍几个角度拆解，区分事实与推断，先不要写代码。
 ```
 
-如果希望它后面持续执行：
+然后：
 
 ```text
-按已冻结计划持续执行，不用等我逐阶段确认。
-但必须按 Product Skeleton → 纵向 Slice → 真实浏览器验收的顺序推进；
-每个 Slice 同时完成前端、后端、数据持久化和失败恢复，未通过不得进入下一 Slice。
-禁止先完成全部后端再统一补前端。
+进入 SYNTHESIZE。
+取长补短后给我一个我们自己的推荐方案。
+说明采用、改造、拒绝、暂存哪些设计；列出关键假设、失效条件和可能推翻结论的新证据。
 ```
+
+再：
+
+```text
+进入 DESIGN，完成用户旅程和页面/交互设计。
+然后进入 PLAN，生成完整项目计划书并做 READY Gate。
+计划冻结后再按 Product Skeleton → 纵向 Slice → 浏览器验收持续执行。
+```
+
+完整示例见：[快速开始](docs/QUICK_START.md)。
 
 ## 30 秒看懂工作流
 
 ```mermaid
 flowchart LR
-    A[项目想法] --> B[DISCOVER\n同类项目调研]
-    B --> C[DESIGN\n用户旅程 + UX]
-    C --> S[PRODUCT SKELETON\n可点击产品骨架]
-    S --> SG[Skeleton ACCEPT\n真实浏览器]
-    SG --> D[PLAN\n冻结 MVP]
-    D --> E[BUILD\n完整纵向 Slice]
-    E --> F[ACCEPT\n真实浏览器]
-    F -->|通过| G[下一个 Slice]
-    F -->|失败| H[修最小阻塞]
-    H --> F
-    G --> E
+    A[IDEA] --> B[DISCOVER\n调研]
+    B --> C[SYNTHESIZE\n推荐方案]
+    C --> D[DESIGN\n用户旅程 + UX]
+    D --> P[PLAN\n完整项目计划]
+    P --> F[FREEZE\nREADY Gate]
+    F --> S[PRODUCT SKELETON\nSlice 0]
+    S --> SG[真实浏览器]
+    SG --> I[BUILD\n纵向 Slice]
+    I --> A1[ACCEPT\n真实浏览器]
+    A1 -->|通过| I
 ```
 
-开发途中突然冒出来的新想法，不能直接塞进当前版本，必须先走 `CHANGE`。
+开发中出现的新想法不能直接塞进当前版本，必须先走 `CHANGE`。
 
 ## 适合谁
 
 - 不会编程，但会描述目标、会使用 AI Coding Agent 的人
-- 经常用 Codex / Claude Code / DeepSeek Harness 做 Web 项目的个人开发者
+- 使用 Codex / Claude Code / DeepSeek Harness 做 Web 项目的个人开发者
+- 喜欢先去 GitHub 找同类项目、取长补短的人
+- 经常拿到“技术上完成、产品上不能用”结果的人
 - 经常让 Agent “不要停、全部做完”，但最终发现前端没跟上的人
-- 经常出现“后端功能有了，页面却还是老样子”的项目
-- 想在开工前先研究 GitHub 同类项目、取长补短的人
-- 已经做乱，需要从真实用户体验重新审计，而不是继续重构架构的项目
+- 需要一份同时覆盖产品、前端、后端、数据、安全、工程和验收的完整项目计划的人
 
 ## 它不是什么
 
-- 不是一套重型敏捷框架
-- 不替代你的 `AGENTS.md` / `CLAUDE.md` / 项目规则
+- 不是重型敏捷框架
+- 不替代 `AGENTS.md` / `CLAUDE.md` / 项目规则
 - 不是 UI 组件库
 - 不是后端架构框架
-- 不鼓励为了“显得专业”制造几十份 Markdown 文档
+- 不要求为了流程制造几十份 Markdown
 
-它故意保持很小：**一个核心 Skill + 少量必要模板 + 产品骨架 + 纵向开发 + 浏览器最终验收。**
+它保持一件事不变：**让已有 AI Coding Agent 更会“做完整 Web 产品”，而不只是更会写代码。**
 
 ## 项目结构
 
 ```text
 web-product-vibe/
-├─ skill/web-product-vibe/       # 唯一核心 Skill，三端共用
+├─ skill/web-product-vibe/
 │  ├─ SKILL.md
 │  ├─ references/
 │  └─ templates/
-├─ docs/                         # 给人看的文档
-├─ platforms/                    # 三个平台安装/使用说明
-├─ examples/                     # 使用示例
-├─ tools/check_skill.py          # 包完整性检查
-├─ install.ps1                   # Windows 安装器
-├─ install.sh                    # macOS/Linux 安装器
+│     ├─ SOLUTION_PROPOSAL.md
+│     ├─ PROJECT_PLAN.md
+│     └─ ...
+├─ docs/
+├─ platforms/
+├─ examples/
+├─ tools/check_skill.py
+├─ install.ps1
+├─ install.sh
 ├─ CHANGELOG.md
 ├─ CONTRIBUTING.md
 ├─ LICENSE
@@ -236,22 +256,24 @@ web-product-vibe/
 
 ## 核心原则
 
-1. **产品真相优先于技术真相。**
-2. **用户旅程优先于架构。**
-3. **Product Skeleton 优先于大规模后端实现。**
-4. **纵向 Slice 优先于横向技术分层。**
-5. **“不要停”不等于“先把后端做完”。**
-6. **GitHub 项目是解法库，不是需求库。**
-7. **一个版本只服务一个主要用户结果。**
-8. **Web/UI 没有真实浏览器用户旅程证据，不允许 DONE。**
+1. **事实、解释、目标、约束和假设要分开。**
+2. **调研不是决策；调研后必须形成自己的方案。**
+3. **用户旅程优先于架构。**
+4. **完整项目计划优先于实现。**
+5. **Product Skeleton 优先于大规模后端实现。**
+6. **纵向 Slice 优先于横向技术分层。**
+7. **“不要停”不等于“先把后端做完”。**
+8. **GitHub 项目是解法库，不是需求库。**
+9. **一个版本只服务一个主要用户结果。**
+10. **Web/UI 没有真实浏览器用户旅程证据，不允许 DONE。**
 
 ## 当前状态
 
-**v0.3.0 — 早期公开版本。** Skill 包和安装器有静态校验，但 Codex、Claude Code、DeepSeek Harness 的 Skill 机制后续可能变化，因此平台兼容说明需要随上游更新。
+**v0.3.0 — 早期公开版本。** Skill 包和安装器有静态校验，但 Codex、Claude Code、DeepSeek Harness 的 Skill 机制可能随上游变化。
 
 ## 贡献
 
-优先接受“小、明确、可验证”的改进，不鼓励把它继续膨胀成重型框架。见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+优先接受“小、明确、可验证”的改进。见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## License
 
