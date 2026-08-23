@@ -6,6 +6,10 @@ All notable changes to Web Product Vibe are documented here.
 
 ### Changed
 
+- Made the core Skill explicitly **model-agnostic and host-neutral**: compatibility is defined by the coding host/harness capabilities, not by the underlying model family.
+- Added `platforms/GENERIC_AGENT.md` for any coding agent, IDE agent, CLI harness, local-model harness, or future host that can load equivalent project instructions.
+- Reframed Codex, Claude Code, and DeepSeek Harness as maintained adapters/examples rather than an exclusive compatibility list.
+- Added capability-level guidance: planning can work with instructions/context only; practical BUILD needs repository/execution tools; full Web/UI ACCEPT needs real-browser capability.
 - Added `SYNTHESIZE` as a first-class mode between research and design so comparable-project research ends in one recommended solution instead of flowing directly into implementation.
 - Added explicit separation of confirmed facts, interpretations, goals, constraints, and unverified assumptions.
 - Added a “question only if it can change the path” rule to reduce unnecessary clarification loops.
@@ -38,7 +42,7 @@ All notable changes to Web Product Vibe are documented here.
 
 ## [0.2.0] - 2026-08-23
 
-- Added Codex, Claude Code and DeepSeek Harness compatibility.
+- Added Codex, Claude Code and DeepSeek Harness maintained adapters.
 - Added reversible installers with backup behavior.
 
 ## [0.1.0] - 2026-08-23
