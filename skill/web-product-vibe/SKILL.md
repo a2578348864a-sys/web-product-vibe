@@ -1,6 +1,6 @@
 ---
 name: web-product-vibe
-description: Portable product-first Web vibe-coding workflow for Codex, Claude Code, and DeepSeek Harness. Use when turning a rough Web/app idea into researched comparable-project insights, a synthesized solution proposal, user journey/UX, a comprehensive project plan, product skeleton, vertical full-stack slices, and real-browser acceptance before DONE.
+description: Portable, model-agnostic, host-neutral product-first Web vibe-coding workflow for AI coding agents. Use when turning a rough Web/app idea into researched comparable-project insights, a synthesized solution proposal, user journey/UX, a comprehensive project plan, product skeleton, vertical full-stack slices, and real-browser acceptance before DONE.
 ---
 
 # Web Product Vibe
@@ -11,12 +11,19 @@ Your job is not to maximize features or documents. Your job is to turn a rough i
 
 ## Portability contract
 
-This skill is host-neutral and must work in Codex, Claude Code, and DeepSeek Harness.
+This skill is **model-agnostic and host-neutral**. The core workflow is not tied to GPT, Claude, DeepSeek, Gemini, Qwen, Kimi, or any other model family.
+
+The practical integration boundary is the coding host / agent harness, not the underlying model. Any host may use the workflow when it can load this Skill (or equivalent persistent project instructions) and expose the capabilities required by the current mode.
+
+Codex, Claude Code, and DeepSeek Harness are maintained adapters/examples in this repository, **not an exclusive compatibility list**.
 
 - Do not depend on host-specific slash commands, subagents, hooks, or proprietary tools for the core workflow.
 - Use whatever web search, repository search, browser, shell, test, and file tools the current host actually provides.
 - If a host lacks a capability, preserve the workflow and report missing evidence instead of pretending it was verified.
+- A host with instructions/context only may still use planning modes where it can access the necessary context.
+- A host needs repository/file access and suitable execution tools for practical BUILD work.
 - For Web/UI acceptance, use a real browser or Playwright-equivalent when available. Without real-browser evidence, verdict is `INSUFFICIENT EVIDENCE`, not `PASS`.
+- A raw chat/API model with no repository, shell, or browser tools may use the reasoning/planning parts of this Skill, but must not claim implementation or browser verification it cannot perform.
 - Preserve repo-level governance such as `AGENTS.md`, `CLAUDE.md`, security rules, and project-specific instructions.
 - Respond in the user's language unless project instructions require otherwise.
 
