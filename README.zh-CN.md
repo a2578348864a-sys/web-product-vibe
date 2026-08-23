@@ -2,13 +2,12 @@
 
 > **把一个模糊想法，经过调研、方案决策、产品设计和完整项目计划，做成真实用户能顺畅用完的 Web 产品。**
 
-[English](README.md) · [快速开始](docs/QUICK_START.md) · [完整工作流](docs/WORKFLOW.md) · [设计原则](docs/DESIGN_PRINCIPLES.md) · [GitHub 发布建议](docs/GITHUB_SETUP.md)
+[English](README.md) · [快速开始](docs/QUICK_START.md) · [完整工作流](docs/WORKFLOW.md) · [设计原则](docs/DESIGN_PRINCIPLES.md) · [通用 Agent 兼容](platforms/GENERIC_AGENT.md) · [GitHub 发布建议](docs/GITHUB_SETUP.md)
 
 ![Version](https://img.shields.io/badge/version-0.3.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Codex](https://img.shields.io/badge/Codex-supported-black)
-![Claude Code](https://img.shields.io/badge/Claude%20Code-supported-black)
-![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-supported-black)
+![Model Agnostic](https://img.shields.io/badge/model-agnostic-1F883D)
+![Agent Agnostic](https://img.shields.io/badge/agent-host--neutral-0969DA)
 
 **Web Product Vibe** 是给非程序员 / Vibe Coding 用户用的“产品优先”AI Coding Skill。
 
@@ -132,7 +131,7 @@ Web Product Vibe 支持 Agent 持续自主执行。
 全部 DB → 全部 API → 全部 Agent → 全部测试 → 最后补 UI
 ```
 
-## 三层完成标准
+## 完成标准
 
 - **Backend PASS**：后端 / 数据 / 业务逻辑正确
 - **Frontend PASS**：页面 / 交互 / 状态 / 导航正确
@@ -141,19 +140,36 @@ Web Product Vibe 支持 Agent 持续自主执行。
 
 API 200、数据库写入、Unit Test、Lint、Typecheck、Build、Schema PASS 都不能单独代表 Web 产品完成。
 
-## 三端兼容
+## 模型无关、Agent 宿主无关
 
-只维护一套核心 Skill：
+核心 Skill **不绑定 GPT、Claude、DeepSeek、Gemini、Qwen、Kimi 或任何其他模型系列**。
+
+真正决定兼容性的不是“底层是什么模型”，而是它所在的 **Coding Agent / IDE Agent / CLI Harness** 能不能读取 Skill，并提供当前任务需要的工具。
+
+按能力可以理解成：
+
+- **只能读取 Markdown / 项目指令** → 仍可使用 `DISCOVER / SYNTHESIZE / DESIGN / PLAN` 等规划能力（前提是能拿到所需上下文）。
+- **有仓库、文件、Shell、测试工具** → 可以真正执行 `BUILD`。
+- **有真实浏览器 / Playwright 等价工具** → 才能完整执行 `ACCEPT`，并诚实判定 Web/UI `DONE`。
+- **有 Web / GitHub 研究工具** → 才能实时执行 `DISCOVER` 的外部调研。
+
+仓库当前维护了三个明确的安装适配示例：
 
 - **Codex** → `.agents/skills/web-product-vibe/`
 - **DeepSeek Harness** → `.agents/skills/web-product-vibe/`
 - **Claude Code** → `.claude/skills/web-product-vibe/`
 
-核心工作流不依赖某个平台独占功能。缺少 Web 搜索、真实浏览器或其他能力时，必须明确证据不足，不能假装验证通过。
+这三个只是**已维护的适配示例，不是兼容上限**。
+
+其他 Coding Agent、IDE Agent、本地模型 Harness 或未来的新工具，只要能提供等价的 Skill / Rules / Project Instructions 机制，就可以接入同一套核心 Skill。详见：[通用 Agent 兼容说明](platforms/GENERIC_AGENT.md)。
+
+如果宿主缺少某项能力，必须保留流程并明确“证据不足”，不能假装 PASS。
 
 ## 快速安装
 
-### Windows
+### 已维护安装器
+
+#### Windows
 
 ```powershell
 .\install.ps1 -HostType all -ProjectRoot "D:\你的项目"
@@ -161,11 +177,23 @@ API 200、数据库写入、Unit Test、Lint、Typecheck、Build、Schema PASS �
 
 也可分别使用 `codex` / `claude` / `dsh`。
 
-### macOS / Linux
+#### macOS / Linux
 
 ```bash
 ./install.sh all /path/to/your-project
 ```
+
+### 其他任何 Coding Agent
+
+把完整的：
+
+```text
+skill/web-product-vibe/
+```
+
+复制到该宿主支持的 Skill / Rules / Project Instructions 目录，并保持 `SKILL.md`、`references/`、`templates/` 在一起。
+
+如果宿主没有正式 Skill 机制，就把 `SKILL.md` 作为持久项目指令加载，同时确保相邻的 `references/` 和 `templates/` 对 Agent 可读。
 
 ## 推荐的第一次使用方式
 
@@ -215,7 +243,8 @@ flowchart LR
 ## 适合谁
 
 - 不会编程，但会描述目标、会使用 AI Coding Agent 的人
-- 使用 Codex / Claude Code / DeepSeek Harness 做 Web 项目的个人开发者
+- 使用任何模型驱动的 Coding Agent / Harness，只要它能加载项目指令或 Skill
+- 使用 Codex / Claude Code / DeepSeek Harness 的用户（仓库提供现成适配示例）
 - 喜欢先去 GitHub 找同类项目、取长补短的人
 - 经常拿到“技术上完成、产品上不能用”结果的人
 - 经常让 Agent “不要停、全部做完”，但最终发现前端没跟上的人
@@ -244,6 +273,10 @@ web-product-vibe/
 │     └─ ...
 ├─ docs/
 ├─ platforms/
+│  ├─ GENERIC_AGENT.md
+│  ├─ CODEX.md
+│  ├─ CLAUDE_CODE.md
+│  └─ DEEPSEEK_HARNESS.md
 ├─ examples/
 ├─ tools/check_skill.py
 ├─ install.ps1
@@ -266,10 +299,11 @@ web-product-vibe/
 8. **GitHub 项目是解法库，不是需求库。**
 9. **一个版本只服务一个主要用户结果。**
 10. **Web/UI 没有真实浏览器用户旅程证据，不允许 DONE。**
+11. **核心工作流模型无关；真正能验证到哪一步，取决于宿主工具能力。**
 
 ## 当前状态
 
-**v0.3.0 — 早期公开版本。** Skill 包和安装器有静态校验，但 Codex、Claude Code、DeepSeek Harness 的 Skill 机制可能随上游变化。
+**v0.3.0 — 早期公开版本。** 核心工作流已经按模型无关、宿主无关设计。仓库目前为 Codex、Claude Code、DeepSeek Harness 维护现成安装适配；其他宿主按通用兼容合同接入，具体目录/配置可能需要按宿主机制映射。
 
 ## 贡献
 
