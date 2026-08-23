@@ -245,19 +245,6 @@ web-product-vibe/
 
 More detail: [Design Principles](docs/DESIGN_PRINCIPLES.md).
 
-## Inspiration
-
-This project is an independent synthesis of public development patterns. It does not bundle or copy the upstream frameworks.
-
-Conceptually inspired by:
-
-- [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD) — progressive product → UX → architecture → implementation flow
-- [GitHub Spec Kit](https://github.com/github/spec-kit) — WHAT before HOW, structured specifications
-- [OpenSpec](https://github.com/Fission-AI/OpenSpec) — lightweight scope agreement and change governance
-- [AI Coding Project Boilerplate](https://github.com/shinpr/ai-coding-project-boilerplate) — UI specification, focused agents and E2E acceptance patterns
-
-See `skill/web-product-vibe/references/INSPIRATION.md` for details.
-
 ## Status
 
 **v0.3.0 — early public release.** The skill package and installers are statically validated, but host behavior can evolve as Codex, Claude Code and DeepSeek Harness change their skill systems.

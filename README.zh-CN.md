@@ -245,17 +245,6 @@ web-product-vibe/
 7. **一个版本只服务一个主要用户结果。**
 8. **Web/UI 没有真实浏览器用户旅程证据，不允许 DONE。**
 
-## 方法来源
-
-这是独立重新整合的方法，不捆绑、不复制下面项目的代码或模板。主要借鉴公开方法：
-
-- [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD)：产品 → UX → 架构 → 实现的渐进流程
-- [GitHub Spec Kit](https://github.com/github/spec-kit)：先 WHAT，再 HOW
-- [OpenSpec](https://github.com/Fission-AI/OpenSpec)：轻量 Scope Freeze 与变更治理
-- [AI Coding Project Boilerplate](https://github.com/shinpr/ai-coding-project-boilerplate)：UI Spec、上下文工程、E2E 验收
-
-详细见 `skill/web-product-vibe/references/INSPIRATION.md`。
-
 ## 当前状态
 
 **v0.3.0 — 早期公开版本。** Skill 包和安装器有静态校验，但 Codex、Claude Code、DeepSeek Harness 的 Skill 机制后续可能变化，因此平台兼容说明需要随上游更新。

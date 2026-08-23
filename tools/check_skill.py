@@ -6,7 +6,6 @@ base = root / "skill" / "web-product-vibe"
 required = [
     "SKILL.md",
     "references/RESEARCH_METHOD.md",
-    "references/INSPIRATION.md",
     "templates/PRODUCT_BRIEF.md",
     "templates/USER_JOURNEY.md",
     "templates/UX_SPEC.md",
