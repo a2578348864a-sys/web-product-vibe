@@ -20,8 +20,8 @@ required = [
 root_required = [
     "README.md", "README.zh-CN.md", "LICENSE", "CHANGELOG.md", "CONTRIBUTING.md",
     "install.ps1", "install.sh", "VERSION", "docs/QUICK_START.md", "docs/WORKFLOW.md",
-    "docs/DESIGN_PRINCIPLES.md", "platforms/CODEX.md", "platforms/CLAUDE_CODE.md",
-    "platforms/DEEPSEEK_HARNESS.md",
+    "docs/DESIGN_PRINCIPLES.md", "platforms/GENERIC_AGENT.md", "platforms/CODEX.md",
+    "platforms/CLAUDE_CODE.md", "platforms/DEEPSEEK_HARNESS.md",
 ]
 errors = []
 
@@ -53,6 +53,8 @@ if skill.exists():
         "continuous execution contract": "continuous execution contract",
         "comprehensive project plan": "comprehensive project-plan rule",
         "confirmed fact": "fact/interpretation/assumption separation",
+        "model-agnostic": "model-agnostic compatibility contract",
+        "host-neutral": "host-neutral compatibility contract",
     }
     for phrase, label in required_phrases.items():
         if phrase not in lower:
@@ -87,4 +89,4 @@ if errors:
         print("-", error)
     sys.exit(1)
 
-print("PASS: canonical skill package is valid for Codex + Claude Code + DeepSeek Harness installation")
+print("PASS: canonical model-agnostic skill package is valid; maintained adapters: Codex + Claude Code + DeepSeek Harness")
