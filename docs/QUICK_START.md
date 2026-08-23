@@ -2,7 +2,9 @@
 
 ## 1. Install
 
-### Windows
+### Maintained adapters
+
+#### Windows
 
 ```powershell
 .\install.ps1 -HostType all -ProjectRoot "D:\your-project"
@@ -10,11 +12,25 @@
 
 Host choices: `codex` / `claude` / `dsh` / `all`.
 
-### macOS / Linux
+#### macOS / Linux
 
 ```bash
 ./install.sh all /path/to/your-project
 ```
+
+### Any other coding agent / harness
+
+The core Skill is model-agnostic and host-neutral. Copy the entire canonical folder:
+
+```text
+skill/web-product-vibe/
+```
+
+into the host's supported Skill / rules / project-instructions location. Keep `SKILL.md`, `references/`, and `templates/` together.
+
+If the host has no formal Skill mechanism, expose `SKILL.md` as persistent project instructions and keep the sibling files accessible to the agent.
+
+See [`platforms/GENERIC_AGENT.md`](../platforms/GENERIC_AGENT.md) for capability levels and integration rules.
 
 ## 2. New project: follow the decision chain
 
@@ -131,7 +147,17 @@ Do not implement it automatically.
 - `Slice DONE` — Backend PASS + Frontend PASS + real-browser acceptance
 - `Project DONE` — the frozen core user journey passes full E2E
 
-## 9. Validate this package
+## 9. Capability rule
+
+The underlying model family does not determine compatibility. The host's tools determine which claims can be verified:
+
+- instructions/context only → planning modes
+- repository + shell/tests → BUILD
+- browser / Playwright-equivalent → full Web/UI ACCEPT
+
+Missing capability means missing evidence, not fake PASS.
+
+## 10. Validate this package
 
 ```bash
 python tools/check_skill.py
@@ -140,5 +166,5 @@ python tools/check_skill.py
 Expected result:
 
 ```text
-PASS: canonical skill package is valid for Codex + Claude Code + DeepSeek Harness installation
+PASS: canonical model-agnostic skill package is valid; maintained adapters: Codex + Claude Code + DeepSeek Harness
 ```
