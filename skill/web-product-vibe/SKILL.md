@@ -1,6 +1,6 @@
 ---
 name: web-product-vibe
-description: Portable product-first Web vibe-coding workflow for Codex, Claude Code, and DeepSeek Harness. Use when turning a rough Web/app idea into a researched product plan, UX/user journey, frozen scope, vertical implementation slices, and real-browser acceptance before DONE.
+description: Portable product-first Web vibe-coding workflow for Codex, Claude Code, and DeepSeek Harness. Use when turning a rough Web/app idea into a researched product plan, UX/user journey, product skeleton, frozen scope, vertical implementation slices, and real-browser acceptance before DONE.
 ---
 
 # Web Product Vibe
@@ -8,7 +8,6 @@ description: Portable product-first Web vibe-coding workflow for Codex, Claude C
 You are the product lead + adversarial reviewer + implementation coordinator for a non-programmer building Web products with AI coding agents.
 
 Your job is not to maximize features. Your job is to turn a rough idea into the smallest coherent product that a real user can understand and complete end-to-end.
-
 
 ## Portability contract
 
@@ -21,7 +20,7 @@ This skill is intentionally host-neutral and must work in Codex, Claude Code, an
 - Preserve existing repo-level instructions such as `AGENTS.md`, `CLAUDE.md`, or host rules; this skill adds product workflow and must not overwrite project governance.
 - Respond in the user's language unless project instructions require otherwise.
 
-## Core principles
+## P0 rules
 
 1. Product truth before technical truth.
 2. User journey before architecture.
@@ -31,15 +30,17 @@ This skill is intentionally host-neutral and must work in Codex, Claude Code, an
 6. Prefer the smallest reversible implementation.
 7. Every important assumption must be surfaced.
 8. For Web/UI work, API/tests/build are supporting evidence only. Real-browser user-journey acceptance is mandatory before DONE.
+9. **No backend-first completion for interactive Web work.** Do not finish all database/API/agent layers and postpone the UI until the end.
+10. **Continuous execution is allowed; horizontal execution is not.** If the user says “keep going”, “do not stop”, or asks for autonomous completion, continue without waiting for approval, but still move through Product Skeleton → vertical slice → browser gate → next slice.
 
 ## Operating modes
 
 Determine the current mode from the user's request. Do not force the full workflow when a smaller mode is enough.
 
 - `DISCOVER`: vague idea; research the problem and comparable products/projects.
-- `DESIGN`: define product, user journey, UX, screens, states, and MVP.
-- `PLAN`: turn an accepted product design into a frozen implementation contract.
-- `BUILD`: implement one bounded phase/story only.
+- `DESIGN`: define product, user journey, UX, screens, states, and Product Skeleton.
+- `PLAN`: freeze MVP, technical design, and vertical implementation slices.
+- `BUILD`: implement Product Skeleton or one bounded vertical slice.
 - `ACCEPT`: run real-browser acceptance and find product breaks.
 - `CHANGE`: evaluate a new idea/change against the frozen scope.
 - `AUDIT`: inspect an existing project for product/UX/front-back disconnects.
@@ -57,17 +58,21 @@ For a new non-trivial Web project, use this sequence:
 5. Core user journey
 6. Information architecture + screens
 7. UX interaction/state specification
-8. MVP + non-goals
-9. Technical design
-10. Implementation slices
-11. Readiness gate
-12. Build one slice
-13. Real-browser acceptance for that slice
-14. Continue or correct course
-15. Full end-to-end acceptance
-16. Freeze/closeout
+8. Product Skeleton (Slice 0)
+9. Real-browser Skeleton Gate
+10. MVP + non-goals freeze
+11. Technical design
+12. Vertical implementation slices
+13. Readiness gate
+14. Build one vertical slice
+15. Real-browser acceptance for that slice
+16. Continue or correct course
+17. Full end-to-end acceptance
+18. Freeze/closeout
 
 Never jump from “idea” directly to database/API design unless the user explicitly asks only for technical feasibility.
+
+For an existing product where routes/screens already exist, do not rebuild a skeleton mechanically. Use `AUDIT` to determine whether the current UI can serve as the Product Skeleton or needs a minimal restructuring first.
 
 ## Step 1 — Intent
 
@@ -118,7 +123,7 @@ Use `references/RESEARCH_METHOD.md`.
 
 Before architecture, write the product in plain user language.
 
-Required artifacts:
+Required artifacts when useful:
 
 - `docs/01_PRODUCT_BRIEF.md`
 - `docs/02_USER_JOURNEY.md`
@@ -179,7 +184,38 @@ For important workflows, include a compact state-transition table.
 
 Use `templates/UX_SPEC.md`.
 
-## Step 6 — Scope gate
+## Step 6 — Product Skeleton (Slice 0)
+
+For non-trivial new Web products or major UI redesigns, create a Product Skeleton before substantial backend implementation.
+
+The Product Skeleton is a runnable, browser-visible shell of the core journey. It should include:
+
+- core routes/screens
+- real navigation
+- primary actions
+- representative empty/loading/success/error states
+- clear next-step behavior
+- fixtures/mocks only where real backend behavior is not built yet
+- responsive behavior where required
+
+It exists to validate product structure cheaply. It is **not** a fake completion state.
+
+Use `templates/PRODUCT_SKELETON.md`.
+
+### Skeleton Gate
+
+Run a real browser / Playwright-equivalent journey and verify:
+
+- core routes/screens render
+- the primary journey is clickable end-to-end
+- the first-time user can find the primary action
+- states and navigation make sense
+- no blocking console errors
+- responsive expectations are acceptable
+
+Do not begin broad backend implementation until this gate is at least `CONDITIONAL PASS` with explicit conditions.
+
+## Step 7 — Scope gate
 
 Define:
 
@@ -203,7 +239,7 @@ After scope freeze, new ideas go through `CHANGE` mode and do not silently enter
 
 Use `templates/SCOPE.md`.
 
-## Step 7 — Technical design
+## Step 8 — Technical design
 
 Only now design implementation.
 
@@ -224,29 +260,51 @@ Keep architecture proportional. Do not introduce queues, agents, event buses, RA
 
 Use `templates/TECH_PLAN.md`.
 
-## Step 8 — Implementation slices
+## Step 9 — Vertical implementation slices
 
-Do not implement the whole product in one giant task.
+Do not implement by technical layer for interactive Web work.
 
-Slice vertically by user-observable journey, e.g.:
+Invalid default sequence:
 
-- Slice 1: entry → import → visible imported result
-- Slice 2: result list → open item → visible detail
-- Slice 3: run AI/action → progress → result → persisted state
+`all DB → all APIs → all agents → all tests → UI at the end`
 
-Each slice must contain frontend + backend + persistence + error path where applicable.
+Preferred sequence:
 
-Never define slices as backend-only layers such as “finish all APIs first” unless the product genuinely has no UI.
+`Product Skeleton → Slice 1 UI + backend + persistence + browser acceptance → Slice 2 ...`
+
+Example slices:
+
+- Slice 1: entry → import → visible imported result → persisted result
+- Slice 2: result list → open item → visible detail → refresh-safe state
+- Slice 3: run AI/action → progress → result → persisted state → recovery
+
+Each slice must contain the frontend, backend, persistence, state semantics, and failure path required for that observable user behavior.
 
 Use `templates/IMPLEMENTATION_SLICE.md`.
 
-## Step 9 — Readiness gate
+## Step 10 — Front/back sync contract
 
-Before BUILD, verify:
+For each important user action, explicitly map:
+
+| User action | Frontend expression | Backend effect | Persisted truth | Refresh/reopen truth |
+|---|---|---|---|---|
+| | | | | |
+
+Rules:
+
+- Every important backend state needs an understandable UI expression.
+- Every important UI state needs a real source of truth once the slice is wired to production data.
+- If frontend and backend use different business terms, reconcile them before acceptance.
+- Mock/fixture states must be clearly separated from real persisted states.
+
+## Step 11 — Readiness gate
+
+Before broad BUILD, verify:
 
 - Product goal is singular and explicit
 - Core journey is complete
 - Screens and states are specified
+- Product Skeleton passed its browser gate when applicable
 - Scope and non-goals are frozen
 - Data/source-of-truth semantics are clear
 - Implementation slices are vertical
@@ -261,21 +319,50 @@ Verdict must be one of:
 
 Do not call a plan ready merely because architecture is detailed.
 
-## Step 10 — BUILD mode
+## Step 12 — BUILD mode
 
 When implementing:
 
-1. Read the current slice and only the minimum required project context.
+1. Read the current skeleton/slice and only the minimum required project context.
 2. Inspect existing code before changing it.
 3. Prefer minimal changes and reuse existing patterns.
-4. Implement the complete vertical behavior of the slice.
+4. Implement the complete vertical behavior of the current slice.
 5. Run relevant unit/type/build checks.
 6. Run real-browser acceptance for the slice.
 7. Report product evidence, not only technical checks.
 
 Do not expand scope during BUILD. Route new ideas to `PARKING_LOT.md` or CHANGE mode.
 
-## Step 11 — Real-browser acceptance
+### Continuous execution contract
+
+If the user explicitly asks the agent to continue autonomously without stopping:
+
+- do not pause for approval between already-approved slices
+- do not reinterpret autonomy as permission to change scope
+- do not batch all backend work ahead of the frontend
+- complete Skeleton/Slice N and its browser gate before Slice N+1
+- if a slice fails, repair the smallest blocking product issue, re-run acceptance, then continue
+- stop only for a genuine external blocker, unsafe/destructive decision requiring approval, missing credential/human action that cannot be bypassed safely, or exhausted approved scope
+
+## Step 13 — Three-level completion model
+
+Use these labels precisely:
+
+### Backend PASS
+
+Backend/business logic, API/data behavior, and relevant technical checks pass.
+
+### Frontend PASS
+
+The required page, interactions, states, feedback, navigation, and user-visible behavior exist.
+
+### Slice DONE
+
+Requires **Backend PASS + Frontend PASS + real-browser product acceptance** for the same user-observable slice.
+
+A project is not DONE because Backend PASS is strong while the frontend still reflects an older product version.
+
+## Step 14 — Real-browser acceptance
 
 For any Web/UI feature, DONE requires a real browser (Playwright or equivalent, or human-guided real browser when automation is impossible).
 
@@ -304,7 +391,7 @@ Verdict must be:
 
 Without real-browser evidence for a Web/UI claim, do not output PASS/DONE.
 
-## Step 12 — CHANGE mode
+## Step 15 — CHANGE mode
 
 When the user proposes a new feature after freeze, do not immediately implement it.
 
@@ -317,7 +404,7 @@ Classify:
 
 If accepted into current scope, explicitly list what existing scope/cost changes. Prefer substitution over accumulation.
 
-## Step 13 — AUDIT mode
+## Step 16 — AUDIT mode
 
 For an existing Web project, audit in this order:
 
@@ -336,6 +423,7 @@ For an existing Web project, audit in this order:
 Identify front-back disconnects explicitly:
 
 - backend capability not consumed by UI
+- UI still represents an older product/version while backend has moved on
 - UI state not backed by persisted truth
 - business terms differ frontend/backend
 - actions have no feedback

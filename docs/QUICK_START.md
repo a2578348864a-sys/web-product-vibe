@@ -34,6 +34,16 @@ Enter DESIGN. Define the core user journey, screens, interactions, states,
 failure recovery, persistence and next step before architecture.
 ```
 
+For a non-trivial new Web product or major UI redesign:
+
+```text
+Build Product Skeleton (Slice 0) first.
+Make the core journey clickable with representative states and fixtures/mocks where needed.
+Run a real-browser Skeleton Gate before substantial backend implementation.
+```
+
+Then:
+
 ```text
 Enter PLAN. Freeze the MVP and non-goals, then derive the minimum technical design
 and split implementation into vertical slices.
@@ -42,27 +52,47 @@ and split implementation into vertical slices.
 ### Build incrementally
 
 ```text
-Enter BUILD. Implement Slice 1 only.
+Enter BUILD. Implement Slice 1 as a complete vertical behavior:
+frontend + interaction + backend + persistence + refresh truth + failure recovery.
 Then enter ACCEPT and verify it through a real browser before continuing.
 ```
 
 Recommended loop:
 
 ```text
-DISCOVER → DESIGN → PLAN → BUILD 1 → ACCEPT → BUILD 2 → ACCEPT → ... → Full ACCEPT
+DISCOVER → DESIGN → PRODUCT SKELETON → Skeleton ACCEPT → PLAN
+→ BUILD 1 → ACCEPT → BUILD 2 → ACCEPT → ... → Full ACCEPT
 ```
 
-## 3. Existing project that feels wrong
+## 3. If you want the agent to keep running without stopping
+
+Use this pattern:
+
+```text
+Continue through the approved plan without waiting for manual confirmation.
+Do not interpret continuous execution as backend-first execution.
+Complete Product Skeleton / Slice N with frontend + backend + persistence + real-browser acceptance
+before moving to Slice N+1. If acceptance fails, fix the smallest blocker, re-test, then continue.
+Do not expand frozen scope automatically.
+```
+
+This preserves autonomous execution while preventing the common failure mode:
+
+```text
+all backend done → old UI left unchanged → final product unusable
+```
+
+## 4. Existing project that feels wrong
 
 ```text
 Use web-product-vibe. Enter AUDIT.
 Start from the real user entry and walk the core journey.
-Find front/back disconnects, misleading UI state, missing persistence,
-refresh problems, failure recovery gaps and dead ends.
+Find front/back disconnects, old UI that no longer represents current backend behavior,
+misleading UI state, missing persistence, refresh problems, failure recovery gaps and dead ends.
 Do not start with architecture cleanup.
 ```
 
-## 4. New idea during development
+## 5. New idea during development
 
 ```text
 Enter CHANGE.
@@ -70,7 +100,15 @@ Classify this idea as REQUIRED NOW / VALUABLE NEXT / PARK / REPLACE.
 Do not implement it automatically.
 ```
 
-## 5. Validate this package
+## 6. Completion labels
+
+Use these precisely:
+
+- `Backend PASS` — backend/data/business behavior is correct
+- `Frontend PASS` — UI/interaction/state behavior exists
+- `Slice DONE` — Backend PASS + Frontend PASS + real-browser user-journey acceptance
+
+## 7. Validate this package
 
 ```bash
 python tools/check_skill.py

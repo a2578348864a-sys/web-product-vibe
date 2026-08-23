@@ -4,6 +4,10 @@
 
 PASS / CONDITIONAL PASS / FAIL / INSUFFICIENT EVIDENCE
 
+## Acceptance type
+
+Product Skeleton / Vertical Slice / Full E2E
+
 ## Journey tested
 
 ## Environment
@@ -27,6 +31,25 @@ PASS / CONDITIONAL PASS / FAIL / INSUFFICIENT EVIDENCE
 | Failure/recovery usable | | |
 | Next step discoverable | | |
 | Front/back semantics consistent | | |
+| UI reflects current product/backend version | | |
+
+## Completion layers
+
+### Backend PASS
+
+PASS / FAIL / NOT APPLICABLE / INSUFFICIENT EVIDENCE
+
+Evidence:
+
+### Frontend PASS
+
+PASS / FAIL / NOT APPLICABLE / INSUFFICIENT EVIDENCE
+
+Evidence:
+
+### Product / Slice verdict
+
+A Web slice can be `DONE` only when Backend PASS + Frontend PASS + real-browser journey acceptance all apply to the same user-observable behavior.
 
 ## Supporting technical checks
 

@@ -2,6 +2,18 @@
 
 All notable changes to Web Product Vibe are documented here.
 
+## [Unreleased]
+
+### Changed
+
+- Added Product Skeleton (Slice 0) as an early real-browser product-structure gate for non-trivial new Web products and major UI redesigns.
+- Added a P0 rule that forbids backend-first completion for interactive Web work.
+- Defined continuous/autonomous execution precisely: agents may keep running without manual confirmation, but must preserve Product Skeleton → vertical slice → browser-gate order.
+- Added a front/back sync contract mapping user actions to frontend expression, backend effect, persisted truth, and refresh/reopen truth.
+- Added three completion layers: `Backend PASS`, `Frontend PASS`, and `Slice DONE`.
+- Strengthened AUDIT guidance for the common failure where backend capability advances while the UI still represents an older product version.
+- Updated Quick Start, workflow, design principles, README files, implementation slice template, acceptance report, and package validation.
+
 ## [0.3.0] - 2026-08-23
 
 ### Changed

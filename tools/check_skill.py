@@ -10,6 +10,7 @@ required = [
     "templates/PRODUCT_BRIEF.md",
     "templates/USER_JOURNEY.md",
     "templates/UX_SPEC.md",
+    "templates/PRODUCT_SKELETON.md",
     "templates/SCOPE.md",
     "templates/TECH_PLAN.md",
     "templates/IMPLEMENTATION_SLICE.md",
@@ -43,8 +44,18 @@ if skill.exists():
     for mode in ["DISCOVER", "DESIGN", "PLAN", "BUILD", "ACCEPT", "CHANGE", "AUDIT"]:
         if mode not in text:
             errors.append(f"SKILL.md missing mode: {mode}")
-    if "real-browser" not in text.lower():
+    lower = text.lower()
+    if "real-browser" not in lower:
         errors.append("SKILL.md missing real-browser acceptance rule")
+    if "product skeleton" not in lower:
+        errors.append("SKILL.md missing Product Skeleton rule")
+    if "no backend-first completion" not in lower:
+        errors.append("SKILL.md missing backend-first prevention rule")
+    if "continuous execution contract" not in lower:
+        errors.append("SKILL.md missing continuous execution contract")
+    for label in ["Backend PASS", "Frontend PASS", "Slice DONE"]:
+        if label not in text:
+            errors.append(f"SKILL.md missing completion label: {label}")
 
 version = (root / "VERSION").read_text(encoding="utf-8").strip() if (root / "VERSION").exists() else ""
 for readme in ["README.md", "README.zh-CN.md"]:
